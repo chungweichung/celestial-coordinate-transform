@@ -1,6 +1,9 @@
 import 'dart:math';
 import 'dart:ui';
 
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
+
 import 'ce_to_ch_string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -193,252 +196,575 @@ class _CeAndChPageState extends State<CeAndChPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+    return width <= 540 ? mobileView() : desktopView();
+  }
+
+  Widget desktopView() {
     return Scaffold(
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           physics: const BouncingScrollPhysics(),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Card(
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadiusDirectional.circular(20)),
-                    margin: const EdgeInsets.fromLTRB(50, 50, 50, 30),
-                    child: SizedBox(
-                      width: 500,
-                      child: createTextFieldEquator(
-                          latController,
-                          const Text('L:'),
-                          latFocusNode,
-                          decFocusNode,
-                          "xx°xx.x'N",
-                          2,
-                          latErrorMessage, (String text) {
-                        List textDegreeArray = text.split('°');
-                        List textMinArray = textDegreeArray[1].split("'");
-                        setState(() {
-                          if (double.parse(textDegreeArray[0]) > 90) {
-                            latErrorMessage = 'not more than 90';
-                          } else if (double.parse(textMinArray[0]) >= 60) {
-                            latErrorMessage = "Minutes unit need <60'";
-                          } else {
-                            latErrorMessage = '';
-                          }
-                        });
-                      }),
-                    )),
-                /*Padding(
-          padding: const EdgeInsets.only(top: 100),
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              CustomPaint(
-                size: const Size(400, 400),
-                painter: CelectialMeridianBase(MediaQuery.of(context).platformBrightness,),
-              ),
-              CustomPaint(
-                size: const Size(400, 400),
-                painter:
-                    CelectialMeridian(lat: lat, dec: dec, t: t, h: h, z: z),
-              )
-            ],
+          child: Padding(
+            padding: const EdgeInsets.only(top: 50.0),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Card(
+                      color: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadiusDirectional.circular(20)),
+                      //margin: const EdgeInsets.fromLTRB(50, 50, 50, 30),
+                      child: SizedBox(
+                        width: 540,
+                        child: createTextFieldEquator(
+                            latController,
+                            const Text('L:'),
+                            latFocusNode,
+                            decFocusNode,
+                            "xx°xx.x'N",
+                            2,
+                            latErrorMessage, (String text) {
+                          List textDegreeArray = text.split('°');
+                          List textMinArray = textDegreeArray[1].split("'");
+                          setState(() {
+                            if (double.parse(textDegreeArray[0]) > 90) {
+                              latErrorMessage = 'not more than 90';
+                            } else if (double.parse(textMinArray[0]) >= 60) {
+                              latErrorMessage = "Minutes unit need <60'";
+                            } else {
+                              latErrorMessage = '';
+                            }
+                          });
+                        }),
+                      )),
+                  /*Padding(
+            padding: const EdgeInsets.only(top: 100),
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                CustomPaint(
+                  size: const Size(400, 400),
+                  painter: CelectialMeridianBase(MediaQuery.of(context).platformBrightness,),
+                ),
+                CustomPaint(
+                  size: const Size(400, 400),
+                  painter:
+                      CelectialMeridian(lat: lat, dec: dec, t: t, h: h, z: z),
+                )
+              ],
+            ),
+                    ),*/
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      //Expanded(child: TextField(controller: decController,)),
+                      Column(
+                        children: [
+                          SizedBox(
+                              width: 250,
+                              child: Card(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadiusDirectional.circular(20)),
+                                  //margin: const EdgeInsets.fromLTRB(50, 50, 50, 0),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Column(children: [
+                                      createTextFieldEquator(
+                                          decController,
+                                          const Text('d:'),
+                                          decFocusNode,
+                                          lhaFocusNode,
+                                          "xx°xx.x'N",
+                                          2,
+                                          decErrorMessage, (String text) {
+                                        List textDegreeArray = text.split('°');
+                                        List textMinArray =
+                                            textDegreeArray[1].split("'");
+                                        setState(() {
+                                          if (double.parse(textDegreeArray[0]) >
+                                              90) {
+                                            decErrorMessage =
+                                                'not more than 90';
+                                          } else if (double.parse(
+                                                  textMinArray[0]) >=
+                                              60) {
+                                            decErrorMessage =
+                                                "Minutes unit need <60'";
+                                          } else {
+                                            decErrorMessage = '';
+                                          }
+                                        });
+                                      }),
+                                      createTextFieldEquator(
+                                          tController,
+                                          const Text('t:'),
+                                          tFocusNode,
+                                          latFocusNode,
+                                          "xxx°xx.x'E",
+                                          3,
+                                          tErrorMessage, (String text) {
+                                        List textDegreeArray = text.split('°');
+                                        List textMinArray =
+                                            textDegreeArray[1].split("'");
+                                        setState(() {
+                                          if (double.parse(textDegreeArray[0]) >
+                                              180) {
+                                            tErrorMessage = 'not more than 180';
+                                          } else if (double.parse(
+                                                  textMinArray[0]) >=
+                                              60) {
+                                            tErrorMessage =
+                                                "Minutes unit need <60'";
+                                          } else {
+                                            tErrorMessage = '';
+                                          }
+                                        });
+                                      }),
+                                      createTextFieldEquator(
+                                          lhaController,
+                                          const Text('LHA:'),
+                                          lhaFocusNode,
+                                          latFocusNode,
+                                          "xxx°xx.x'",
+                                          3,
+                                          lhaErrorMessage, (String text) {
+                                        List textDegreeArray = text.split('°');
+                                        List textMinArray =
+                                            textDegreeArray[1].split("'");
+                                        setState(() {
+                                          if (double.parse(textDegreeArray[0]) >
+                                              360) {
+                                            lhaErrorMessage =
+                                                'not more than 360';
+                                          } else if (double.parse(
+                                                  textMinArray[0]) >=
+                                              60) {
+                                            lhaErrorMessage =
+                                                "Minutes unit need <60'";
+                                          } else {
+                                            lhaErrorMessage = '';
+                                          }
+                                        });
+                                      }),
+                                    ]),
+                                  ))),
+                          const Text('Celestial Equator')
+                        ],
+                      ),
+
+                      Column(
+                        children: [
+                          IconButton(
+                              onPressed: () {
+                                culculateHorizon();
+                              },
+                              icon: Icon(Icons.arrow_right_alt_sharp)),
+                          Transform.rotate(angle: pi,child: 
+                          IconButton(
+                              onPressed: () {
+                                culculatorEquator();
+                              },
+                              icon: Icon(Icons.arrow_right_alt_sharp)),)
+                          
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          SizedBox(
+                              width: 250,
+                              child: Card(
+                                  color: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadiusDirectional.circular(20)),
+                                  //margin: const EdgeInsets.fromLTRB(50, 50, 50, 0),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5),
+                                    child: Column(children: [
+                                      createTextFieldHorizen(
+                                          hController,
+                                          const Text('H:'),
+                                          hFocusNode,
+                                          znFocusNode,
+                                          "xx°xx.x'",
+                                          2,
+                                          hErrorMessage, (String text) {
+                                        List textDegreeArray = text.split('°');
+                                        List textMinArray =
+                                            textDegreeArray[1].split("'");
+                                        setState(() {
+                                          if (double.parse(textDegreeArray[0]) >
+                                              90) {
+                                            hErrorMessage = 'not more than 90';
+                                          } else if (double.parse(
+                                                  textMinArray[0]) >=
+                                              60) {
+                                            hErrorMessage =
+                                                "Minutes unit need <60'";
+                                          } else {
+                                            hErrorMessage = '';
+                                          }
+                                        });
+                                      }),
+                                      createTextFieldHorizen(
+                                          zController,
+                                          const Text('Az:'),
+                                          zFocusNode,
+                                          latFocusNode,
+                                          "Nxxx°xx.x'E",
+                                          4,
+                                          zErrorMessage, (String text) {
+                                        List textDegreeArray = text.split('°');
+                                        List textMinArray =
+                                            textDegreeArray[1].split("'");
+                                        setState(() {
+                                          if (double.parse(textDegreeArray[0]) >
+                                              180) {
+                                            zErrorMessage = 'not more than 180';
+                                          } else if (double.parse(
+                                                  textMinArray[0]) >=
+                                              60) {
+                                            zErrorMessage =
+                                                "Minutes unit need <60'";
+                                          } else {
+                                            zErrorMessage = '';
+                                          }
+                                        });
+                                      }),
+                                      createTextFieldHorizen(
+                                          znController,
+                                          const Text('Zn:'),
+                                          znFocusNode,
+                                          latFocusNode,
+                                          "xxx°xx.x'",
+                                          3,
+                                          znErrorMessage, (String text) {
+                                        List textDegreeArray = text.split('°');
+                                        List textMinArray =
+                                            textDegreeArray[1].split("'");
+                                        setState(() {
+                                          if (double.parse(textDegreeArray[0]) >
+                                              360) {
+                                            znErrorMessage =
+                                                'not more than 360';
+                                          } else if (double.parse(
+                                                  textMinArray[0]) >=
+                                              60) {
+                                            znErrorMessage =
+                                                "Minutes unit need <60'";
+                                          } else {
+                                            znErrorMessage = '';
+                                          }
+                                        });
+                                      }),
+                                    ]),
+                                  ))),
+                          const Text('Celestial Horizen')
+                        ],
+                      )
+                    ],
+                  )
+                ]),
           ),
-        ),*/
-                Row(
+        ));
+  }
+
+  Widget mobileView() {
+    return Scaffold(
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          physics: const BouncingScrollPhysics(),
+          child: Container(
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 50),
+              child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    //Expanded(child: TextField(controller: decController,)),
+                    Card(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadiusDirectional.circular(20)),
+                        //margin: const EdgeInsets.fromLTRB(50, 50, 50, 30),
+                        child: SizedBox(
+                          width: 250,
+                          child: createTextFieldEquator(
+                              latController,
+                              const Text('L:'),
+                              latFocusNode,
+                              decFocusNode,
+                              "xx°xx.x'N",
+                              2,
+                              latErrorMessage, (String text) {
+                            List textDegreeArray = text.split('°');
+                            List textMinArray = textDegreeArray[1].split("'");
+                            setState(() {
+                              if (double.parse(textDegreeArray[0]) > 90) {
+                                latErrorMessage = 'not more than 90';
+                              } else if (double.parse(textMinArray[0]) >= 60) {
+                                latErrorMessage = "Minutes unit need <60'";
+                              } else {
+                                latErrorMessage = '';
+                              }
+                            });
+                          }),
+                        )),
+                    /*Padding(
+              padding: const EdgeInsets.only(top: 100),
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  CustomPaint(
+                    size: const Size(400, 400),
+                    painter: CelectialMeridianBase(MediaQuery.of(context).platformBrightness,),
+                  ),
+                  CustomPaint(
+                    size: const Size(400, 400),
+                    painter:
+                        CelectialMeridian(lat: lat, dec: dec, t: t, h: h, z: z),
+                  )
+                ],
+              ),
+                      ),*/
                     Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
-                            width: 250,
-                            child: Card(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadiusDirectional.circular(20)),
-                                //margin: const EdgeInsets.fromLTRB(50, 50, 50, 0),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Column(children: [
-                                    createTextFieldEquator(
-                                        decController,
-                                        const Text('d:'),
-                                        decFocusNode,
-                                        lhaFocusNode,
-                                        "xx°xx.x'N",
-                                        2,
-                                        decErrorMessage, (String text) {
-                                      List textDegreeArray = text.split('°');
-                                      List textMinArray =
-                                          textDegreeArray[1].split("'");
-                                      setState(() {
-                                        if (double.parse(textDegreeArray[0]) >
-                                            90) {
-                                          decErrorMessage = 'not more than 90';
-                                        } else if (double.parse(
-                                                textMinArray[0]) >=
-                                            60) {
-                                          decErrorMessage =
-                                              "Minutes unit need <60'";
-                                        } else {
-                                          decErrorMessage = '';
-                                        }
-                                      });
-                                    }),
-                                    createTextFieldEquator(
-                                        tController,
-                                        const Text('t:'),
-                                        tFocusNode,
-                                        latFocusNode,
-                                        "xxx°xx.x'E",
-                                        3,
-                                        tErrorMessage, (String text) {
-                                      List textDegreeArray = text.split('°');
-                                      List textMinArray =
-                                          textDegreeArray[1].split("'");
-                                      setState(() {
-                                        if (double.parse(textDegreeArray[0]) >
-                                            180) {
-                                          tErrorMessage = 'not more than 180';
-                                        } else if (double.parse(
-                                                textMinArray[0]) >=
-                                            60) {
-                                          tErrorMessage =
-                                              "Minutes unit need <60'";
-                                        } else {
-                                          tErrorMessage = '';
-                                        }
-                                      });
-                                    }),
-                                    createTextFieldEquator(
-                                        lhaController,
-                                        const Text('LHA:'),
-                                        lhaFocusNode,
-                                        latFocusNode,
-                                        "xxx°xx.x'",
-                                        3,
-                                        lhaErrorMessage, (String text) {
-                                      List textDegreeArray = text.split('°');
-                                      List textMinArray =
-                                          textDegreeArray[1].split("'");
-                                      setState(() {
-                                        if (double.parse(textDegreeArray[0]) >
-                                            360) {
-                                          lhaErrorMessage = 'not more than 360';
-                                        } else if (double.parse(
-                                                textMinArray[0]) >=
-                                            60) {
-                                          lhaErrorMessage =
-                                              "Minutes unit need <60'";
-                                        } else {
-                                          lhaErrorMessage = '';
-                                        }
-                                      });
-                                    }),
-                                  ]),
-                                ))),
-                        const Text('Celestial Equator')
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        SizedBox(
-                            width: 250,
-                            child: Card(
-                                color: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadiusDirectional.circular(20)),
-                                //margin: const EdgeInsets.fromLTRB(50, 50, 50, 0),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Column(children: [
-                                    createTextFieldHorizen(
-                                        hController,
-                                        const Text('H:'),
-                                        hFocusNode,
-                                        znFocusNode,
-                                        "xx°xx.x'",
-                                        2,
-                                        hErrorMessage, (String text) {
-                                      List textDegreeArray = text.split('°');
-                                      List textMinArray =
-                                          textDegreeArray[1].split("'");
-                                      setState(() {
-                                        if (double.parse(textDegreeArray[0]) >
-                                            90) {
-                                          hErrorMessage = 'not more than 90';
-                                        } else if (double.parse(
-                                                textMinArray[0]) >=
-                                            60) {
-                                          hErrorMessage =
-                                              "Minutes unit need <60'";
-                                        } else {
-                                          hErrorMessage = '';
-                                        }
-                                      });
-                                    }),
-                                    createTextFieldHorizen(
-                                        zController,
-                                        const Text('Az:'),
-                                        zFocusNode,
-                                        latFocusNode,
-                                        "Nxxx°xx.x'E",
-                                        4,
-                                        zErrorMessage, (String text) {
-                                      List textDegreeArray = text.split('°');
-                                      List textMinArray =
-                                          textDegreeArray[1].split("'");
-                                      setState(() {
-                                        if (double.parse(textDegreeArray[0]) >
-                                            180) {
-                                          zErrorMessage = 'not more than 180';
-                                        } else if (double.parse(
-                                                textMinArray[0]) >=
-                                            60) {
-                                          zErrorMessage =
-                                              "Minutes unit need <60'";
-                                        } else {
-                                          zErrorMessage = '';
-                                        }
-                                      });
-                                    }),
-                                    createTextFieldHorizen(
-                                        znController,
-                                        const Text('Zn:'),
-                                        znFocusNode,
-                                        latFocusNode,
-                                        "xxx°xx.x'",
-                                        3,
-                                        znErrorMessage, (String text) {
-                                      List textDegreeArray = text.split('°');
-                                      List textMinArray =
-                                          textDegreeArray[1].split("'");
-                                      setState(() {
-                                        if (double.parse(textDegreeArray[0]) >
-                                            360) {
-                                          znErrorMessage = 'not more than 360';
-                                        } else if (double.parse(
-                                                textMinArray[0]) >=
-                                            60) {
-                                          znErrorMessage =
-                                              "Minutes unit need <60'";
-                                        } else {
-                                          znErrorMessage = '';
-                                        }
-                                      });
-                                    }),
-                                  ]),
-                                ))),
-                        const Text('Celestial Horizen')
+                        //Expanded(child: TextField(controller: decController,)),
+                        Column(
+                          children: [
+                            SizedBox(
+                                width: 250,
+                                child: Card(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadiusDirectional.circular(
+                                                20)),
+                                    //margin: const EdgeInsets.fromLTRB(50, 50, 50, 0),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5),
+                                      child: Column(children: [
+                                        createTextFieldEquator(
+                                            decController,
+                                            const Text('d:'),
+                                            decFocusNode,
+                                            lhaFocusNode,
+                                            "xx°xx.x'N",
+                                            2,
+                                            decErrorMessage, (String text) {
+                                          List textDegreeArray =
+                                              text.split('°');
+                                          List textMinArray =
+                                              textDegreeArray[1].split("'");
+                                          setState(() {
+                                            if (double.parse(
+                                                    textDegreeArray[0]) >
+                                                90) {
+                                              decErrorMessage =
+                                                  'not more than 90';
+                                            } else if (double.parse(
+                                                    textMinArray[0]) >=
+                                                60) {
+                                              decErrorMessage =
+                                                  "Minutes unit need <60'";
+                                            } else {
+                                              decErrorMessage = '';
+                                            }
+                                          });
+                                        }),
+                                        createTextFieldEquator(
+                                            tController,
+                                            const Text('t:'),
+                                            tFocusNode,
+                                            latFocusNode,
+                                            "xxx°xx.x'E",
+                                            3,
+                                            tErrorMessage, (String text) {
+                                          List textDegreeArray =
+                                              text.split('°');
+                                          List textMinArray =
+                                              textDegreeArray[1].split("'");
+                                          setState(() {
+                                            if (double.parse(
+                                                    textDegreeArray[0]) >
+                                                180) {
+                                              tErrorMessage =
+                                                  'not more than 180';
+                                            } else if (double.parse(
+                                                    textMinArray[0]) >=
+                                                60) {
+                                              tErrorMessage =
+                                                  "Minutes unit need <60'";
+                                            } else {
+                                              tErrorMessage = '';
+                                            }
+                                          });
+                                        }),
+                                        createTextFieldEquator(
+                                            lhaController,
+                                            const Text('LHA:'),
+                                            lhaFocusNode,
+                                            latFocusNode,
+                                            "xxx°xx.x'",
+                                            3,
+                                            lhaErrorMessage, (String text) {
+                                          List textDegreeArray =
+                                              text.split('°');
+                                          List textMinArray =
+                                              textDegreeArray[1].split("'");
+                                          setState(() {
+                                            if (double.parse(
+                                                    textDegreeArray[0]) >
+                                                360) {
+                                              lhaErrorMessage =
+                                                  'not more than 360';
+                                            } else if (double.parse(
+                                                    textMinArray[0]) >=
+                                                60) {
+                                              lhaErrorMessage =
+                                                  "Minutes unit need <60'";
+                                            } else {
+                                              lhaErrorMessage = '';
+                                            }
+                                          });
+                                        }),
+                                      ]),
+                                    ))),
+                            const Text('Celestial Equator')
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Transform.rotate(angle: pi/2,child: 
+                          IconButton(
+                              onPressed: () {
+                                culculateHorizon();
+                              },
+                              icon: Icon(Icons.arrow_right_alt_sharp))
+                          ),
+                          Transform.rotate(angle: -pi/2,child: 
+                          IconButton(
+                              onPressed: () {
+                                culculatorEquator();
+                              },
+                              icon: Icon(Icons.arrow_right_alt_sharp)),)
+                          
+                        ],
+                      ),
+                        Column(
+                          children: [
+                            SizedBox(
+                                width: 250,
+                                child: Card(
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadiusDirectional.circular(
+                                                20)),
+                                    //margin: const EdgeInsets.fromLTRB(50, 50, 50, 0),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5),
+                                      child: Column(children: [
+                                        createTextFieldHorizen(
+                                            hController,
+                                            const Text('H:'),
+                                            hFocusNode,
+                                            znFocusNode,
+                                            "xx°xx.x'",
+                                            2,
+                                            hErrorMessage, (String text) {
+                                          List textDegreeArray =
+                                              text.split('°');
+                                          List textMinArray =
+                                              textDegreeArray[1].split("'");
+                                          setState(() {
+                                            if (double.parse(
+                                                    textDegreeArray[0]) >
+                                                90) {
+                                              hErrorMessage =
+                                                  'not more than 90';
+                                            } else if (double.parse(
+                                                    textMinArray[0]) >=
+                                                60) {
+                                              hErrorMessage =
+                                                  "Minutes unit need <60'";
+                                            } else {
+                                              hErrorMessage = '';
+                                            }
+                                          });
+                                        }),
+                                        createTextFieldHorizen(
+                                            zController,
+                                            const Text('Az:'),
+                                            zFocusNode,
+                                            latFocusNode,
+                                            "Nxxx°xx.x'E",
+                                            4,
+                                            zErrorMessage, (String text) {
+                                          List textDegreeArray =
+                                              text.split('°');
+                                          List textMinArray =
+                                              textDegreeArray[1].split("'");
+                                          setState(() {
+                                            if (double.parse(
+                                                    textDegreeArray[0]) >
+                                                180) {
+                                              zErrorMessage =
+                                                  'not more than 180';
+                                            } else if (double.parse(
+                                                    textMinArray[0]) >=
+                                                60) {
+                                              zErrorMessage =
+                                                  "Minutes unit need <60'";
+                                            } else {
+                                              zErrorMessage = '';
+                                            }
+                                          });
+                                        }),
+                                        createTextFieldHorizen(
+                                            znController,
+                                            const Text('Zn:'),
+                                            znFocusNode,
+                                            latFocusNode,
+                                            "xxx°xx.x'",
+                                            3,
+                                            znErrorMessage, (String text) {
+                                          List textDegreeArray =
+                                              text.split('°');
+                                          List textMinArray =
+                                              textDegreeArray[1].split("'");
+                                          setState(() {
+                                            if (double.parse(
+                                                    textDegreeArray[0]) >
+                                                360) {
+                                              znErrorMessage =
+                                                  'not more than 360';
+                                            } else if (double.parse(
+                                                    textMinArray[0]) >=
+                                                60) {
+                                              znErrorMessage =
+                                                  "Minutes unit need <60'";
+                                            } else {
+                                              znErrorMessage = '';
+                                            }
+                                          });
+                                        }),
+                                      ]),
+                                    ))),
+                            const Text('Celestial Horizen')
+                          ],
+                        )
                       ],
                     )
-                  ],
-                )
-              ]),
+                  ]),
+            ),
+          ),
         ));
   }
 }

@@ -6,7 +6,6 @@ import 'package:celestial_coordinate_transform_web/ch_to_ce.dart';
 
 import 'great_circle_page.dart';
 import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math.dart';
 import 'ce_and_ch_page.dart';
 
 void main() {
@@ -21,21 +20,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-            //primarySwatch: Colors.grey,
+        /*theme: ThemeData(
+            primarySwatch: Colors.grey,
+            primaryColor: Colors.grey,
+            
+            scaffoldBackgroundColor:Colors.black,
+            colorScheme: ColorScheme.light().copyWith(primary: Colors.grey)
             ),
-        darkTheme: ThemeData(brightness: Brightness.dark),
-        home: /*FutureBuilder(
-            future: _initialization,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                print('error');
-              } else if (snapshot.connectionState == ConnectionState.done) {
-                return HomePage();
-              }
-              return CircularProgressIndicator();
-            }));*/
-            HomePage());
+        darkTheme: ThemeData(brightness: Brightness.dark),*/
+        
+        home:HomePage());
   }
 }
 
@@ -49,7 +43,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-   //var width = MediaQuery.of(context).size.width;
   Widget currentPage = const CeAndChPage();
   menuTapHandler(int index) {
     setState(() {
@@ -68,10 +61,10 @@ class _HomePageState extends State<HomePage> {
       Navigator.pop(context);
     });
   }
-
+  
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const CeAndChPage();/*Scaffold(
       body: currentPage,
       drawer: Drawer(
         child: ListView(padding: EdgeInsets.zero, children: <Widget>[
@@ -80,7 +73,7 @@ class _HomePageState extends State<HomePage> {
           ListTile(onTap: () => menuTapHandler(1))
         ]),
       ),
-    );
+    );*/
   }
 }
 
