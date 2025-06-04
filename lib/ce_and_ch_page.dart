@@ -80,7 +80,7 @@ class _CeAndChPageState extends State<CeAndChPage> with WidgetsBindingObserver {
     updateWindowSize();
   }
 
-  void culculateHorizon() {
+  void calculateHorizon() {
     setState(() {
       if (tFocusNode.hasFocus == true) {
         lha = -toRadFormat(tController.text) % (pi * 2);
@@ -104,7 +104,7 @@ class _CeAndChPageState extends State<CeAndChPage> with WidgetsBindingObserver {
     });
   }
 
-  void culculatorEquator() {
+  void calculateEquator() {
     setState(() {
       if (zFocusNode.hasFocus == true) {
         znController.text = zToZn(zController.text);
@@ -152,7 +152,7 @@ class _CeAndChPageState extends State<CeAndChPage> with WidgetsBindingObserver {
             errorText: errorMessage.isEmpty ? null : errorMessage),
         onSubmitted: (value) {
           FocusScope.of(context).requestFocus(node);
-          culculateHorizon();
+          calculateHorizon();
         },
         onChanged: onChanged,
       ),
@@ -187,7 +187,7 @@ class _CeAndChPageState extends State<CeAndChPage> with WidgetsBindingObserver {
             errorText: errorMessage.isEmpty ? null : errorMessage),
         onSubmitted: (value) {
           FocusScope.of(context).requestFocus(node);
-          culculatorEquator();
+          calculateEquator();
         },
         onChanged: onChanged,
       ),
@@ -360,13 +360,13 @@ class _CeAndChPageState extends State<CeAndChPage> with WidgetsBindingObserver {
                         children: [
                           IconButton(
                               onPressed: () {
-                                culculateHorizon();
+                                calculateHorizon();
                               },
                               icon: Icon(Icons.arrow_right_alt_sharp)),
                           Transform.rotate(angle: pi,child: 
                           IconButton(
                               onPressed: () {
-                                culculatorEquator();
+                                calculateEquator();
                               },
                               icon: Icon(Icons.arrow_right_alt_sharp)),)
                           
@@ -644,14 +644,14 @@ class _CeAndChPageState extends State<CeAndChPage> with WidgetsBindingObserver {
                           Transform.rotate(angle: pi/2,child: 
                           IconButton(
                               onPressed: () {
-                                culculateHorizon();
+                                calculateHorizon();
                               },
                               icon: Icon(Icons.arrow_right_alt_sharp))
                           ),
                           Transform.rotate(angle: -pi/2,child: 
                           IconButton(
                               onPressed: () {
-                                culculatorEquator();
+                                calculateEquator();
                               },
                               icon: Icon(Icons.arrow_right_alt_sharp)),)
                           
